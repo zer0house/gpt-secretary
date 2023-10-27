@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 
-export type Role = 'system' | 'user';
+export type Role = 'assistant' | 'user';
 
 export type Message = {
   id: string;

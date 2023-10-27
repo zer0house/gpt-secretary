@@ -62,7 +62,7 @@ const Circle = styled.span`
 
 const TypingSpinner = () => (
   <MessageFlexWrapper>
-    <MessageWrapper $role="system">
+    <MessageWrapper $role="assistant">
       <Wrapper>
         typing
         <Box>

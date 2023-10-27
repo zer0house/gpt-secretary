@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef } from 'react';
 import { useChattingActions, useChattingStore } from '@/core/store';
-import { INIT_MESSAGE } from '@/constants';
+import { FIX_INIT_MESSAGE, GEN_INIT_MESSAGE } from '@/constants';
 import { Wrapper, Date } from './Body.styled';
 import { Message } from './Message';
 import TypingSpinner from './Message/TypingSpinner';
@@ -9,7 +9,7 @@ const Body = () => {
   const scrollRef = useRef<HTMLElement>(null);
   const messagesBodyRef = useRef<HTMLDivElement>(null);
   const { messages, isWaiting } = useChattingStore((state) => state);
-  const { pushSystemMessage } = useChattingActions();
+  const { pushUserMessage, pushAssistantMessage } = useChattingActions();
 
   useEffect(() => {
     if (!messagesBodyRef.current) return;
@@ -18,7 +18,9 @@ const Body = () => {
   }, [isWaiting]);
 
   useEffect(() => {
-    pushSystemMessage(INIT_MESSAGE);
+    pushAssistantMessage(FIX_INIT_MESSAGE);
+    pushAssistantMessage(GEN_INIT_MESSAGE);
+    console.log('pushAssistantMessage(GEN_INIT_MESSAGE);' + GEN_INIT_MESSAGE);
   }, []);
 
   return (
@@ -30,7 +32,7 @@ const Body = () => {
           return (
             <Fragment key={message.id}>
               {isNewDate && <Date>{message.sendAt.format('YYYY년MM월DD일')}</Date>}
-              <Message message={message} />
+              <Message message={message}  />
             </Fragment>
           );
         })}

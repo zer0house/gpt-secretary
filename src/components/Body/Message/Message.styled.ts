@@ -12,7 +12,7 @@ export const MessageFlexWrapper = styled.div`
 
 export const MessageWrapper = styled.div<{ $role: Role }>`
   display: flex;
-  flex-direction: ${({$role}) => $role === 'system' ? 'row' : 'row-reverse'};
+  flex-direction: ${({$role}) => $role === 'assistant' ? 'row' : 'row-reverse'};
   align-items: flex-end;
   row-gap: 5px;
   width: 100%;
@@ -27,11 +27,11 @@ export const MessageBodyWrapper = styled.div<{ $role: Role }>`
   white-space: break-spaces;
   ${({ $role }) => {
     switch($role) {
-      case 'system':
+      case 'assistant':
         return css`
           background-color: var(--background-color-primary);
           border-radius: 0 20px 20px 20px;
-          color: var(--system-message-color);
+          color: var(--assistant-message-color);
           box-shadow: inset 0 -2px 0 var(--box-shadow-color);
         `;
       case 'user':

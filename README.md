@@ -1,3 +1,30 @@
+
+### 'src\pages\index.tsx'
+기본 구조
+
+### 'src\components\Body\Body.tsx'
+바디는 
+```
+import { useChattingActions, useChattingStore } from '@/core/store';
+  const { pushAssistantMessage } = useChattingActions();
+```
+될 때 업데이트
+
+### 'src\core\store\useChattingStore.tsx'
+이건 'src\components\Input\Input.tsx'에서
+
+'useChattingActions'이 발동되면 
+
+
+'src\components\Input\Input.tsx'
+
+  const { pushUserMessage, pushAssistantMessage, setError } = useChattingActions();
+
+
+'src\components\Body\Message\Message.tsx'
+
+
+
 # Open AI를 이용한 [저에 대해 무엇이든 물어보세요!](https://gpt-secretary.vercel.app/)
 
 ## 소개
@@ -13,8 +40,19 @@
 ## 사용한 라이브러리
 
 ### Next.js
+```
+npm install next
+
+```
 ### Zustand
+```
+npm install zustand
+
+```
 ### next-PWA
+```
+npm install next-pwa
+```
 
 <br />
 

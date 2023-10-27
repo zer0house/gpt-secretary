@@ -1,4 +1,4 @@
-import { KeyboardEvent, useCallback, useRef } from 'react';
+import { KeyboardEvent, useEffect, useCallback, useRef } from 'react';
 import { FiNavigation } from 'react-icons/fi';
 import { Wrapper, ChatTextArea, SendButton } from './Input.styled';
 import { useChattingActions, useChattingStore } from '@/core/store';
@@ -6,7 +6,7 @@ import { useChattingActions, useChattingStore } from '@/core/store';
 const Input = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { hasError, isWaiting, fingerprint } = useChattingStore((state) => state);
-  const { pushUserMessage, pushSystemMessage, setError } = useChattingActions();
+  const { pushUserMessage, pushAssistantMessage, updateAssistantMessage, setError } = useChattingActions();
 
   const onChange = () => {
     if (textareaRef.current) {
@@ -25,11 +25,14 @@ const Input = () => {
     }
 
     const res = await fetch('/api/openai', {
-      body: JSON.stringify({ content: message, fingerprint: fingerprint }),
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
-      method: 'post',
+      body: JSON.stringify({
+        content: message,
+        fingerprint: fingerprint
+      }),
     });
 
     if (!res.ok) {
@@ -42,20 +45,20 @@ const Input = () => {
     if (!data) {
       return;
     }
-
     const reader = data.getReader();
     const decoder = new TextDecoder();
+
     let done = false;
     let messageResponse = '';
-
-    while (!done) {
+    while (!done && reader) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
       messageResponse += chunkValue;
+      updateAssistantMessage(messageResponse);
+      console.log(messageResponse);
     }
 
-    pushSystemMessage(messageResponse);
   }, []);
 
   const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -63,6 +66,10 @@ const Input = () => {
       onSubmit();
     }
   };
+
+  useEffect(() => {
+    onChange();
+  }, []);
 
   const disabled = hasError || isWaiting;
   return (

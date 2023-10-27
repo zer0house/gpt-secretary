@@ -17,7 +17,8 @@ export type ChattingStoreType = {
   hasError: boolean;
   actions: {
     pushUserMessage: (content: string) => void;
-    pushSystemMessage: (content: string) => void;
+    pushAssistantMessage: (content: string) => void;
+    updateAssistantMessage: (content: string) => void;
     setError: () => void;
     setFingerprint: (fingerprint: string) => void;
   };
@@ -43,18 +44,42 @@ export const useChattingStore = create(
           isWaiting: true,
         });
       },
-      pushSystemMessage: (content) => {
+      pushAssistantMessage: (content) => {
         const { messages } = getState();
         const message: Message = {
           id: generateRandomString(5),
           sendAt: dayjs(),
-          sender: 'system',
+          sender: 'assistant',
           body: content,
         };
         setState({
           messages: [...messages, message],
           isWaiting: false,
         });
+        console.log('messages :', messages);
+      },
+      updateAssistantMessage: (content: string) => {
+        const { messages } = getState();
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage && lastMessage.sender === 'assistant') {
+          lastMessage.body = content;
+          setState({
+            messages: [...messages.slice(0, -1), lastMessage]
+          });
+        } else {
+          // 임시 메시지가 없을 경우 새 메시지 추가
+          const message: Message = {
+            id: generateRandomString(5),
+            sendAt: dayjs(),
+            sender: 'assistant',
+            body: content,
+          };
+          setState({
+            messages: [...messages, message],
+            isWaiting: false,
+          });
+          console.log('messages :', messages);
+        }
       },
       setError: () => {
         setState({ hasError: true, isWaiting: false });
