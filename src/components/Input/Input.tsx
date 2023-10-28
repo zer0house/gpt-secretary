@@ -24,13 +24,22 @@ const Input = () => {
       textareaRef.current.value = '';
     }
 
+    const { messages: previousMessages } = useChattingStore.getState();
+    console.log('previousMessages :', previousMessages);
+
+    // Keep only the last 10 messages & transform them to the right format(expected by the API)
+    const recentMessages = previousMessages.slice(-10).map((msg) => ({
+      role: msg.role,
+      content: msg.content,
+    }));
+    console.log('recentMessages :', recentMessages);
     const res = await fetch('/api/openai', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        content: message,
+        messages: recentMessages,
         fingerprint: fingerprint
       }),
     });
@@ -58,6 +67,10 @@ const Input = () => {
       updateAssistantMessage(messageResponse);
       console.log(messageResponse);
     }
+    
+    // After the chatbot response is completely generated:
+    const { messages } = useChattingStore.getState(); // Get the current state directly
+    console.log('messages :', messages);
 
   }, []);
 

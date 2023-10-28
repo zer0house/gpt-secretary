@@ -5,8 +5,8 @@ export type Role = 'assistant' | 'user';
 export type Message = {
   id: string;
   sendAt: Dayjs;
-  body: string;
-  sender: Role;
+  content: string;
+  role: Role;
 };
 
 export type ChatCompletionRequestMessage = {

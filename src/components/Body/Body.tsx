@@ -15,12 +15,11 @@ const Body = () => {
     if (!messagesBodyRef.current) return;
     if (!scrollRef.current) return;
     scrollRef.current.scrollTop = messagesBodyRef.current.scrollHeight;
-  }, [isWaiting]);
+  }, [messages]);  
 
   useEffect(() => {
     pushAssistantMessage(FIX_INIT_MESSAGE);
     pushAssistantMessage(GEN_INIT_MESSAGE);
-    console.log('pushAssistantMessage(GEN_INIT_MESSAGE);' + GEN_INIT_MESSAGE);
   }, []);
 
   return (

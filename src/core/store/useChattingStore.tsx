@@ -36,8 +36,8 @@ export const useChattingStore = create(
         const message: Message = {
           id: generateRandomString(5),
           sendAt: dayjs(),
-          sender: 'user',
-          body: content,
+          role: 'user',
+          content: content,
         };
         setState({
           messages: [...messages, message],
@@ -49,20 +49,19 @@ export const useChattingStore = create(
         const message: Message = {
           id: generateRandomString(5),
           sendAt: dayjs(),
-          sender: 'assistant',
-          body: content,
+          role: 'assistant',
+          content: content,
         };
         setState({
           messages: [...messages, message],
           isWaiting: false,
         });
-        console.log('messages :', messages);
       },
       updateAssistantMessage: (content: string) => {
         const { messages } = getState();
         const lastMessage = messages[messages.length - 1];
-        if (lastMessage && lastMessage.sender === 'assistant') {
-          lastMessage.body = content;
+        if (lastMessage && lastMessage.role === 'assistant') {
+          lastMessage.content = content;
           setState({
             messages: [...messages.slice(0, -1), lastMessage]
           });
@@ -71,14 +70,13 @@ export const useChattingStore = create(
           const message: Message = {
             id: generateRandomString(5),
             sendAt: dayjs(),
-            sender: 'assistant',
-            body: content,
+            role: 'assistant',
+            content: content,
           };
           setState({
             messages: [...messages, message],
             isWaiting: false,
           });
-          console.log('messages :', messages);
         }
       },
       setError: () => {
